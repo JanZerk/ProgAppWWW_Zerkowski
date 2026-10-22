@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Kontakt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Kontakt</h1>
+        <h2>Formularz demonstracyjny. Dane pojawią się w adresie strony; zapytanie nie
+            zostanie zapisane ani wysłane e-mailem</h2>
+        <nav>
+            <a href="/index.html"> Strona główna </a>
+            <a href="/kontakt.html" aria-current="page"> Kontakt </a>
+            <a href="/produkt.html"> Produkt </a>
+        </nav>
+    </header>
+    <main>
+        <form method="get" action="kontakt.html">
+            <div>
+                <label for="input-email">Proszę podać E-mail :</label>
+                <input type="email" id="input-email" name="email" required>
+            </div>
+            <div>
+                <label for="input-produkt">Którego produktu dotyczy zapytanie? :</label>
+                <select id="input-produkt" name="produkt" required>
+                    <option value="">Wybierz produkt</option>
+                    <option value="produkt1">Kettlebell</option>
+                    <option value="produkt2">Shaker</option>
+                    <option value="produkt3">Tanktop</option>
+                </select>
+            </div>
+            <div>
+                <label for="input-ilosc">Liczba sztuk produktu (1-5):</label>
+                <input type="number" id="input-ilosc" name="ilosc" required min="1" max="5" step="1">
+            </div>
+            <div>
+                <label for="input-wiadomosc">Proszę opisać zapytanie (10-500 znaków):</label>
+                <textarea id="input-wiadomosc" name="wiadomosc" required minlength="10" maxlength="500"></textarea>
+            </div>
+            <div>
+                <button type="submit">Sprawdź zapytanie</button>
+            </div>
+        </form>
+    </main>
+    <footer>Gym shop</footer>
+</body>
+
+</html>

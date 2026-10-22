@@ -1,0 +1,72 @@
+:root {
+    --tekst-kolor: #000000;
+    --fokus-kolor: #ff5000;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    color: var(--tekst-kolor);
+}
+
+header,
+main,
+footer {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 15px;
+}
+
+.katalog {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.karta {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    max-width: 100%;
+}
+
+table {
+    border: 2px solid #000000;
+}
+
+a:hover,
+button:hover {
+    color: var(--fokus-kolor);
+}
+
+a:focus-visible,
+button:focus-visible {
+    outline: 3px solid var(--fokus-kolor);
+    outline-offset: 2px;
+}
+
+@media(min-width:768px) {
+    .katalog {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
