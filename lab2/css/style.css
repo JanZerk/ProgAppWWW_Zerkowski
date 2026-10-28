@@ -1,0 +1,106 @@
+:root {}
+
+html[data-theme="light"] {
+    --background-kolor: #f7f5f0;
+    --tekst-kolor: #2b2b2b;
+    --border-kolor: #000000;
+    --fokus-kolor: #d9480f;
+    --link-kolor: #1c5fb8;
+}
+
+html[data-theme="dark"] {
+    --background-kolor: #1e2124;
+    --tekst-kolor: #e4e6e8;
+    --border-kolor: #ffffff;
+    --fokus-kolor: #ffa94d;
+    --link-kolor: #74c0fc;
+}
+
+* {
+    box-sizing: border-box;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+body {
+    margin: 0;
+    background: var(--background-kolor);
+    color: var(--tekst-kolor);
+}
+
+header,
+main,
+footer {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.katalog {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin: 1px;
+}
+
+
+
+.karta {
+    border: 3px solid var(--border-kolor);
+    padding: 10px;
+
+}
+
+.data-czas {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    max-width: 100%;
+}
+
+table {
+    border: 2px solid var(--border-kolor);
+}
+
+a {
+    color: var(--link-kolor);
+}
+
+a:hover,
+button:hover {
+    color: var(--fokus-kolor);
+}
+
+a:focus-visible,
+button:focus-visible {
+    outline: 3px solid var(--fokus-kolor);
+    outline-offset: 2px;
+}
+
+
+
+@media(min-width:768px) {
+    .katalog {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
