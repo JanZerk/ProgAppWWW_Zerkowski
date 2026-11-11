@@ -1,100 +1,71 @@
-# Laboratorium 3: jQuery, animacje i AJAX
+# Laboratorium 4: PHP, formularze i sesja
 
-**Wersja jQuery:** 4.0.0
 
 ## Uruchomienie projektu
 
-1. Projekt działa na lokalnym serwerze Apache, więc konieczne jest zainstalowanie XAMPP.
-2. Przenieś folder projektu (`lab3`) do katalogu `htdocs` w folderze instalacyjnym XAMPP, np. `C:\xampp\htdocs\lab3`.
-3. W panelu sterowania XAMPP włącz moduł Apache.
-4. W przeglądarce wejdź na `http://localhost/lab3/`. Jeśli Apache działa na innym porcie, dopisz go do adresu (np. `http://localhost:8080/lab3/`).
+1. Zainstaluj XAMPP.
+2. Skopiuj folder projektu do katalogu `htdocs`, np. `C:\xampp\htdocs\lab4`.
+3. W panelu XAMPP uruchom moduł **Apache**.
+4. Otwórz w przeglądarce `http://localhost/lab4/`.
 
-## Pseudokod
+Jeśli Apache działa na innym porcie, dopisz go do adresu, np. `http://localhost:8080/lab4/`.
 
-### Przycisk A
 
-    powiekszony = FAŁSZ
+## Pseudokody
 
-    JEŻELI (KLIK na A):
-        powiekszony = NIE powiekszony
-        PRZERWIJ bieżącą animację A i WYCZYŚĆ kolejkę
-        JEŻELI (powiekszony):
-            ZWIĘKSZ ROZMIAR DO 240 x 130
-        W PRZECIWNYM RAZIE:
-            PRZYWRÓĆ ROZMIAR DO 160 x 90
+### Formularz GET (filtr)
 
-### Przycisk B
+```
+filtr = $_GET['kategoria'] lub 'wszystkie' gdy brak parametru
+komunikatFiltr = ''
 
-    maKursor = FAŁSZ, maFokus = FAŁSZ
+JEŻELI filtr == ''
+    filtr = 'wszystkie'
+W PRZECIWNYM WYPADKU JEŻELI filtr nie jest jednym z ['wszystkie', 'ksiazki', 'akcesoria']
+    filtr = 'wszystkie'
+    komunikatFiltr = "Nieprawidłowa kategoria, wyświetlono pełną listę."
+```
 
-    JEŻELI (kursor wszedł na B):       maKursor = PRAWDA
-    JEŻELI (kursor opuścił B):         maKursor = FAŁSZ
-    JEŻELI (FOKUS z klawiatury na B):  maFokus = PRAWDA
-    JEŻELI (B stracił fokus):          maFokus = FAŁSZ
+- **Poprawne:** `GET kategoria=ksiazki` → filtr jest na liście → tylko książki, HTTP 200, bez komunikatu.
+- **Błędne:** `GET kategoria=abc` → filtr spoza listy → pełna lista, HTTP 200, komunikat „Nieprawidłowa kategoria, wyświetlono pełną listę."
 
-    PO KAŻDEJ ZMIANIE STANU:
-        PRZERWIJ bieżącą animację B i WYCZYŚĆ kolejkę
-        JEŻELI (maKursor LUB maFokus):
-            ZWIĘKSZ ROZMIAR DO 220 x 120
-        W PRZECIWNYM RAZIE:
-            PRZYWRÓĆ ROZMIAR DO 160 x 90
+### Formularz POST (zapis wyboru)
 
-### Przycisk C
+```
+JEŻELI istnieje $_POST['produkt']
+    produkt = $_POST['produkt']
+    ilosc = $_POST['ilosc'] lub '' gdy brak
+    stan = null
 
-    ileClick = 0
+    JEŻELI produkt nie jest liczbą całkowitą
+        ustaw HTTP 400, komunikat "błędne id produktu"
+    W PRZECIWNYM WYPADKU JEŻELI ilosc nie jest liczbą całkowitą
+        ustaw HTTP 400, komunikat "błędna ilość"
+    W PRZECIWNYM WYPADKU JEŻELI ilosc < 1 LUB ilosc > 5
+        ustaw HTTP 400, komunikat "ilość spoza zakresu 1-5"
+    W PRZECIWNYM WYPADKU
+        stan = stan produktu z katalogu o id == produkt (lub null, gdy brak)
 
-    JEŻELI (KLIK na C):
-        JEŻELI (C w trakcie animacji):  ZAKOŃCZ
-        JEŻELI (ileClick >= 5):         ZAKOŃCZ
-        ileClick = ileClick + 1
-        ZWIĘKSZ ROZMIAR DO (160 + 20 * ileClick) x (90 + 10 * ileClick)
+        JEŻELI stan == null
+            ustaw HTTP 400, komunikat "nie ma takiego produktu"
+        W PRZECIWNYM WYPADKU JEŻELI ilosc > stan
+            ustaw HTTP 400, komunikat "ilość przekracza stan"
+        W PRZECIWNYM WYPADKU
+            zapisz w sesji ostatni_wybor = {id: produkt, ilosc: ilosc}
+            wyślij przekierowanie 303 do lab4.php
+            zakończ skrypt
+```
 
-## Próby animacji
+- **Poprawne:** `POST produkt=2, ilosc=3` → walidacje przechodzą → zapis do sesji → 303 → `GET lab4.php` → widok pokazuje „Ostatni wybór: nazwa, ilość 3".
+- **Błędne:** `POST produkt=2, ilosc=9` → 400 i komunikat → bez zapisu i bez przekierowania → widok pokazuje komunikat błędu i poprzedni wybór.
 
-### Próba 1: Szybkie kliknięcia A
+## Wyniki prób
 
-**Kroki**
-1. Użytkownik naciska przycisk **A**.
-2. Użytkownik klika przycisk **A** szybko dziesięć razy.
-
-**Wynik oczekiwany**
-Po resecie i 10 kliknięciach A ma stan bazowy. Po zakończeniu klikania animacje nie odtwarzają zaległej kolejki.
-
-**Wynik rzeczywisty**
-Zgodny z oczekiwaniami.
-
----
-
-### Próba 2: Kursor i fokus B
-
-**Wynik oczekiwany**
-Wyjście kursora przy zachowanym fokusie nie zmniejsza obiektu. Utrata obu stanów (kursor poza przyciskiem i brak fokusu) przywraca rozmiar bazowy 160 × 90 px.
-
-**Wynik rzeczywisty**
-Zgodny z oczekiwaniami.
-
----
-
-### Próba 3: Limit i reset C
-
-**Wynik oczekiwany**
-Pięć kroków daje 260 × 140 px. Dalsze kliknięcia nie powiększają obiektu. Reset wykonany podczas animacji zeruje stan (160 × 90 px, licznik 0, status "0 na 5 razy"), a C znów przyjmuje kliknięcia.
-
-**Wynik rzeczywisty**
-Zgodny z oczekiwaniami.
-
----
-
-### Próba 4: Klawiatura i ruch
-
-**Wynik oczekiwany**
-Tab dociera do przycisków. Enter i Spacja obsługują A, C i reset. Ograniczenie ruchu wyłącza przejścia (zmiany rozmiaru są natychmiastowe), zachowując wszystkie funkcje.
-
-**Wynik rzeczywisty**
-Zgodny z oczekiwaniami.
-
-## Próby AJAX
-
-1. **Poprawna odpowiedź:** po kliknięciu „Sprawdź serwer" pojawia się komunikat „PHP działa" ze skryptu `status.php` (kod 200).
-2. **Błąd 404:** po zmianie nazwy pliku `status.php` serwer zwraca kod 404, a w obszarze wyniku pojawia się komunikat: `GET http://localhost/lab3/status.php [HTTP/1.1 404 Not Found 4ms]`.
-3. **Ograniczona prędkość sieci:** najpierw wyświetla się „Oczekiwanie na odpowiedź serwera...", a po otrzymaniu odpowiedzi komunikat „PHP działa".
+| Próba | Kroki | Oczekiwany wynik | Rzeczywisty wynik |
+|---|---|---|---|
+| Filtr GET | Otwórz `lab4.php?kategoria=ksiazki`, potem `?kategoria=abc` i `?kategoria[]=ksiazki` | `?kategoria=ksiazki` pokazuje tylko książki. Nieznana kategoria lub `?kategoria[]=ksiazki` pokazuje pełną listę i komunikat. | Książki są filtrowane poprawnie. Dla błędnych danych pojawia się komunikat i pełna lista. |
+| Poprawny POST i odświeżenie | Wybierz dostępny produkt i poprawną ilość, kliknij „Wybierz", naciśnij F5, zmień filtr | W Network widać POST 303, potem GET 200. Po odświeżeniu i zmianie filtra zapisany wybór pozostaje widoczny. | W Network są odpowiednie kody. Po odświeżeniu i zmianie filtra wybór pozostaje widoczny. |
+| Błędne wartości POST | W Inspektorze zmień wartość opcji ilości na `0`, `6`, `2.5`, `2abc`; usuń atrybut `name`; dopisz `[]` do nazwy pola; podaj nieznane id produktu | Każda próba daje HTTP 400 i pozostawia poprzedni wybór. | Każda próba daje HTTP 400, poprzedni wybór nie ulega zmianie i pojawia się odpowiedni komunikat. |
+| Stan magazynowy | Wybierz produkt ze stanem 1 i ilość 2 | Serwer odrzuca wybór (HTTP 400), mimo że 2 mieści się w przedziale 1–5. | Serwer odrzuca próbę z kodem HTTP 400. |
+| Odrębna sesja i tekst HTML | Otwórz `lab4.php` w oknie prywatnym. Zmień nazwę produktu na `<b>Test</b>`, odśwież, przywróć zwykłą nazwę | W nowej sesji nie ma wyboru. Nazwa `<b>Test</b>` wyświetla się jako tekst. | Nowa sesja nie ma zapisanego wyboru, `<b>Test</b>` wyświetla się jako tekst. |
+| Strona po zmianie ścieżek | Otwórz stronę główną i podstrony z `html/` | Działają style, obrazy, linki i funkcje z lab3, w tym animacje i żądanie do `status.php`. | Wszystkie funkcje z lab3 działają poprawnie. |
