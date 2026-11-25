@@ -20,7 +20,7 @@
 
 
 
-Jeśli Apache działa na innym porcie, dopisz go do adresu, np. `http://localhost:8080/lab5/`.
+Jeśli Apache działa na innym porcie, dopisz go do adresu, np. `http://localhost:8080/lab6/`.
 
 
 
