@@ -1,0 +1,179 @@
+:root,
+html[data-theme="light"] {
+    --background-kolor: #f7f5f0;
+    --surface-kolor: #ffffff;
+    --tekst-kolor: #2b2b2b;
+    --border-kolor: #5c5a55;
+    --fokus-kolor: #d9480f;
+    --link-kolor: #1c5fb8;
+    --button-kolor: #1a6fd1;
+    --button-hover-kolor: #1559ab;
+    --button-tekst-kolor: #ffffff;
+}
+
+html[data-theme="dark"] {
+    --background-kolor: #1e2124;
+    --surface-kolor: #282c30;
+    --tekst-kolor: #e4e6e8;
+    --border-kolor: #8a9097;
+    --fokus-kolor: #ffa94d;
+    --link-kolor: #74c0fc;
+    --button-kolor: #2b7de9;
+    --button-hover-kolor: #1f66c4;
+    --button-tekst-kolor: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+body {
+    margin: 0;
+    background: var(--background-kolor);
+    color: var(--tekst-kolor);
+}
+
+header,
+main,
+footer {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.katalog {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin: 1px;
+}
+
+.karta {
+    background: var(--surface-kolor);
+    border: 3px solid var(--border-kolor);
+    padding: 10px;
+}
+
+.karta-produkt {
+    background: var(--surface-kolor);
+    border: 3px solid var(--border-kolor);
+    padding: 10px;
+    width: 350px;
+}
+
+
+button {
+    display: inline-block;
+    padding: 12px 24px;
+    color: var(--button-tekst-kolor);
+    background-color: var(--button-kolor);
+    border: 2px solid var(--button-kolor);
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--button-hover-kolor);
+    border-color: var(--button-hover-kolor);
+}
+
+
+
+
+.data-czas {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    justify-content: center;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    max-width: 100%;
+    background: var(--surface-kolor);
+    color: var(--tekst-kolor);
+    border: 1px solid var(--border-kolor);
+    border-radius: 6px;
+    padding: 8px;
+}
+
+table {
+    background: var(--surface-kolor);
+    border: 2px solid var(--border-kolor);
+}
+
+a {
+    color: var(--link-kolor);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid var(--fokus-kolor);
+    outline-offset: 2px;
+}
+
+#sekcja-demonstracyjna-title {
+    padding: 20px;
+    justify-content: center;
+}
+
+#sekcja-demonstracyjna {
+    box-sizing: border-box;
+    border: 1px solid var(--border-kolor);
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    margin: 20px 0;
+    gap: 10px;
+
+}
+
+.demo-button {
+    width: 160px;
+    height: 90px;
+}
+
+.film {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.film iframe {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: 0;
+}
+
+@media (min-width: 768px) {
+    .katalog {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
